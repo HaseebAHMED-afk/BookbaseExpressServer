@@ -1,4 +1,4 @@
-const { register, login, verify, generateForgetPasswordCode, checkForgetPasswordCode, resetUserPassword } = require('../Controllers/User');
+const { register, login, verify, generateForgetPasswordCode, checkForgetPasswordCode, resetUserPassword, getAllUsers } = require('../Controllers/User');
 
 const router = require('express').Router()
 
@@ -14,5 +14,7 @@ router.post('/generateForgetPasswordCode', generateForgetPasswordCode)
 router.post('/checkForgetPasswordCode' , checkForgetPasswordCode)
 
 router.post('/resetUserPassword' , resetUserPassword)
+
+router.get('/getAllUsers' , getAllUsers)
 
 module.exports = router;

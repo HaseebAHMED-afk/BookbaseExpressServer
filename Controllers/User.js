@@ -339,3 +339,18 @@ exports.resetUserPassword = async (req, res) => {
 }
 
 
+exports.getAllUsers = async (req,res) =>{
+    try {
+        const response = await User.find({})
+
+        res.json({
+            status:200,
+            message: response
+        })
+    } catch (error) {
+        res.json({
+            status:500,
+            message: error.message
+        })
+    }
+}
