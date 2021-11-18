@@ -1,15 +1,16 @@
-const User = require("../Model/User");
+const User = require("../Model/Account");
 const bcrypt = require('bcrypt');
 const { generateAccessToken } = require("../Utils/jwt");
 const VerificationCodes = require("../Model/VerificationCodes");
 const ForgetPassword = require('../Model/ForgetPasswordCode')
 const { sendMail } = require("../Utils/nodemailer");
 const ForgetPasswordCode = require("../Model/ForgetPasswordCode");
+const Account = require("../Model/Account");
 const saltRounds = 10;
 require('dotenv').config()
 
 exports.register = async (req, res) => {
-    const { firstName, lastName, email, password, country, gender, languageOfWriting } = req.body;
+    const { email, password } = req.body;
 
     try {
         const checkEmail = await User.findOne({ email: email });
@@ -31,43 +32,17 @@ exports.register = async (req, res) => {
                         })
                     } else {
                         const newUser = await User({
-                            firstName,
-                            lastName,
                             email,
                             password: hash,
-                            gender,
-                            languageOfWriting,
-                            country
                         })
 
                         try {
                             const response = await newUser.save();
 
-                            try {
-                                const newCode = new VerificationCodes({ userId: response._id })
-
-                                const responseCode = await newCode.save()
-
-                                let mail = {
-                                    to: `${response.email}`,
-                                    from: `${process.env.GMAIL_USER}`,
-                                    text: `Hello and welcome to Bookbase. To verify your account please click on the following link: http://localhost:5000/user/verify/${responseCode._id}  `
-                                }
-
-                                await sendMail(mail)
-
-                                res.json({
-                                    status: 200,
-                                    message: response
-                                })
-
-                            } catch (error) {
-                                res.json({
-                                    status: 500,
-                                    message: error.message
-                                })
-                            }
-
+                            res.json({
+                                status: 200,
+                                message: response
+                            })
 
                         } catch (error) {
                             res.json({
@@ -89,6 +64,64 @@ exports.register = async (req, res) => {
     } catch (error) {
         res.json({
             status: 500,
+            message: error.message
+        })
+    }
+
+}
+
+
+exports.buildProfile = async (req,res) =>{
+    const {userId , firstName , lastName , authorLicense , country , gender , languageOfWriting } = req.body;
+
+    try {
+        const user = await User.findOne({_id: userId})
+        try {
+            const newProfile =  new Account({userId , firstName , lastName , authorLicense , country , gender , languageOfWriting})
+    
+            const response = await newProfile.save()
+    
+            try {
+                const newVerificationCode = new VerificationCodes({userId: response._id})
+    
+                const responseCode = await newVerificationCode.save()
+    
+                try {
+                    let mail = {
+                        to: `${user.email}`,
+                        from: `${process.env.GMAIL_USER}`,
+                        text: `Hello from Bookbase. To activate your account, please click on the following link: http://localhost:5000/user/activate/${responseCode._id}  `
+                    }
+    
+                    await sendMail(mail)
+
+                    res.json({
+                        status:200,
+                        message: response
+                    })
+                } catch (error) {
+                    res.json({
+                        status:500,
+                        message: error.message
+                    })
+                }
+            } catch (error) {
+                res.json({
+                    status:500,
+                    message: error.message
+                })
+            }
+            
+        } catch (error) {
+            res.json({
+                status:500,
+                message: error.message
+            })
+        }
+
+    } catch (error) {
+        res.json({
+            status:500,
             message: error.message
         })
     }
@@ -339,18 +372,29 @@ exports.resetUserPassword = async (req, res) => {
 }
 
 
-exports.getAllUsers = async (req,res) =>{
+exports.getAllUsers = async (req, res) => {
     try {
         const response = await User.find({})
 
         res.json({
-            status:200,
+            status: 200,
             message: response
         })
     } catch (error) {
         res.json({
-            status:500,
+            status: 500,
             message: error.message
         })
+    }
+}
+
+exports.editProfile = async (req, res) => {
+
+    const
+
+    try {
+
+    } catch (error) {
+
     }
 }

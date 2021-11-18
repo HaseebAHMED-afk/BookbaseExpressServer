@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const verificationSchema = new mongoose.Schema({
-    userId: {
+    accountId: {
         type: String,
         required: true
     }
