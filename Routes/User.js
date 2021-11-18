@@ -15,6 +15,5 @@ router.post('/checkForgetPasswordCode' , checkForgetPasswordCode)
 
 router.post('/resetUserPassword' , resetUserPassword)
 
-router.get('/getAllUsers' , getAllUsers)
 
 module.exports = router;

@@ -1,16 +1,20 @@
 const mongoose = require('mongoose')
 
 
-const publisherSchema = new mongoose.Schema({
+const authorSchema = new mongoose.Schema({
     userId:{
         type: String,
         required: true
     },
-    name: {
+    firstName: {
         type: String,
         required: true
     },
-    address: {
+    lastName: {
+        type: String,
+        required: true
+    },
+    authorlicense:{
         type: String,
         required: true
     },
@@ -18,16 +22,20 @@ const publisherSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    federalTaxIdentificationNumber: {
+    gender: {
         type: String,
         required: true
     },
-    stateTaxRegistrationCertificateNumber:{
+    languageOfWriting: {
         type: String,
         required: true
+    },
+    verified:{
+        type:Boolean,
+        default: false
     }
 },{
     timestamps: true
 })
 
-module.exports = new mongoose.model('Publisher' , publisherSchema)
+module.exports = new mongoose.model('Author' , authorSchema)

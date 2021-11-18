@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const accountSchema = new mongoose.Schema({
+const readerSchema = new mongoose.Schema({
     userId:{
         type: String,
         required: true
@@ -14,19 +14,11 @@ const accountSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    authorlicense:{
-        type: String,
-        required: true
-    },
     country: {
         type: String,
         required: true
     },
     gender: {
-        type: String,
-        required: true
-    },
-    languageOfWriting: {
         type: String,
         required: true
     },
@@ -38,4 +30,4 @@ const accountSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = new mongoose.model('Account' , accountSchema)
+module.exports = new mongoose.model('Reader' , readerSchema)
