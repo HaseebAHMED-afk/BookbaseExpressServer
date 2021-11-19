@@ -22,6 +22,10 @@ const readerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profileImageUrl:{
+        type: String,
+        required: true
+    },
     verified:{
         type:Boolean,
         default: false

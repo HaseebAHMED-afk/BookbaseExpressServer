@@ -1,4 +1,4 @@
-const { register, login, verify, generateForgetPasswordCode, checkForgetPasswordCode, resetUserPassword, getAllUsers, buildAuthorProfile, buildReaderProfile, buildPublisherProfile } = require('../Controllers/User');
+const { register, login, verify, generateForgetPasswordCode, checkForgetPasswordCode, resetUserPassword, getAllUsers, buildAuthorProfile, buildReaderProfile, buildPublisherProfile, editPublisherProfile, editAuthorProfile, editReaderProfile } = require('../Controllers/User');
 
 const router = require('express').Router()
 
@@ -20,6 +20,12 @@ router.post('/generateForgetPasswordCode', generateForgetPasswordCode)
 router.post('/checkForgetPasswordCode' , checkForgetPasswordCode)
 
 router.post('/resetUserPassword' , resetUserPassword)
+
+router.post('/editPublisherProfile' , editPublisherProfile)
+
+router.post('/editAuthorProfile' , editAuthorProfile)
+
+router.post('/editReaderProfile' , editReaderProfile)
 
 
 module.exports = router;

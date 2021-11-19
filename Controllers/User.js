@@ -81,6 +81,7 @@ exports.buildAuthorProfile = async (req, res) => {
     country,
     gender,
     languageOfWriting,
+    profileImageUrl
   } = req.body;
 
   try {
@@ -94,6 +95,7 @@ exports.buildAuthorProfile = async (req, res) => {
         country,
         gender,
         languageOfWriting,
+        profileImageUrl
       });
 
       const response = await newProfile.save();
@@ -145,7 +147,7 @@ exports.buildAuthorProfile = async (req, res) => {
 };
 
 exports.buildReaderProfile = async (req, res) => {
-  const { userId, firstName, lastName, country, gender } = req.body;
+  const { userId, firstName, lastName, country, gender , profileImageUrl} = req.body;
 
   try {
     const user = await User.findOne({ _id: userId });
@@ -156,6 +158,7 @@ exports.buildReaderProfile = async (req, res) => {
         lastName,
         country,
         gender,
+        profileImageUrl
       });
 
       const response = await newProfile.save();
@@ -214,6 +217,7 @@ exports.buildPublisherProfile = async (req, res) => {
     country,
     federalTaxIdentificationNumber,
     stateTaxRegistrationCertificateNumber,
+    profileImageUrl
   } = req.body;
 
   try {
@@ -226,6 +230,7 @@ exports.buildPublisherProfile = async (req, res) => {
         country,
         federalTaxIdentificationNumber,
         stateTaxRegistrationCertificateNumber,
+        profileImageUrl
       });
 
       const response = await newProfile.save();
@@ -288,26 +293,106 @@ exports.login = async (req, res) => {
           if (err) {
             res.json({
               status: 400,
-              message: err,
+              message: err.message,
             });
           } else {
             if (result === true) {
+
+
               const token = await generateAccessToken({ email });
 
-              res.json({
-                status: 200,
+              try {
+                const readerAccount = await Reader.findOne({userId: response._id})
+
+                if(readerAccount){
+                   res.json({
+                   status: 200,
                 message: {
-                  _id: response._id,
-                  firstName: response.firstName,
-                  lastName: response.lastName,
+                  _id: readerAccount._id,
+                  userId: readerAccount.userId,
+                  firstName: readerAccount.firstName,
+                  lastName: readerAccount.lastName,
                   email: response.email,
-                  country: response.country,
-                  languageOfWriting: response.languageOfWriting,
-                  gender: response.gender,
-                  verified: response.verified,
+                  country: readerAccount.country,
+                  gender: readerAccount.gender,
+                  verified: readerAccount.verified,
+                  profileImageUrl: readerAccount.profileImageUrl,
                   token: token,
+                  accountType:"Reader"
                 },
               });
+                }else{
+                  try {
+                    const authorAccount = await Author.findOne({userId: response._id})
+                    
+                    if(authorAccount){
+                          res.json({
+                            status: 200,
+                            message: {
+                              _id: authorAccount._id,
+                              userId: authorAccount.userId,
+                              firstName: authorAccount.firstName,
+                              lastName: authorAccount.lastName,
+                              email: response.email,
+                              country: authorAccount.country,
+                              gender: authorAccount.gender,
+                              verified: authorAccount.verified,
+                              profileImageUrl: authorAccount.profileImageUrl,
+                              languageOfWriting:authorAccount.profileImageUrl,
+                              token: token,
+                              accountType:"Author"
+                            },
+                          });
+                    }else{
+                      try {
+                        const publisherAccount = await Publisher.findOne({userId: response._id})
+
+                        if(publisherAccount){
+                             res.json({
+                              status: 200,
+                              message: {
+                                _id: publisherAccount._id,
+                              userId: publisherAccount.userId,
+                              email: response.email,
+                              address:publisherAccount.address,
+                              country: publisherAccount.country,
+                              federalTaxIdentificationNumber:publisherAccount.federalTaxIdentificationNumber,
+                              stateTaxRegistrationCertificateNumber: publisherAccount.stateTaxRegistrationCertificateNumber,
+                              verified: publisherAccount.verified,
+                              profileImageUrl: publisherAccount.profileImageUrl,
+                              token: token,
+                              accountType:"Publisher"
+                              },
+                            });
+                        }else{
+                          res.json({
+                            status:403,
+                            message:"Account not found"
+                          })
+                        }
+                      } catch (error) {
+                        res.json({
+                          status:500,
+                          message:error.message
+                        })
+                      }
+                    }
+                  } catch (error) {
+                    res.json({
+                      status:500,
+                      message:error.message
+                    })
+                  }
+                }
+
+              } catch (error) {
+                res.json({
+                  status:500,
+                  message:error.message
+                })
+              }  
+
+              
             } else {
               res.json({
                 status: 402,
@@ -319,7 +404,7 @@ exports.login = async (req, res) => {
       } catch (error) {
         res.json({
           status: 500,
-          message: err.message,
+          message: error.message,
         });
       }
     } else {
@@ -331,7 +416,7 @@ exports.login = async (req, res) => {
   } catch (error) {
     res.json({
       status: 500,
-      message: err.message,
+      message: error.message,
     });
   }
 };
@@ -653,29 +738,74 @@ exports.resetUserPassword = async (req, res) => {
   }
 };
 
-// exports.getAllUsers = async (req, res) => {
-//     try {
-//         const response = await User.find({})
 
-//         res.json({
-//             status: 200,
-//             message: response
-//         })
-//     } catch (error) {
-//         res.json({
-//             status: 500,
-//             message: error.message
-//         })
-//     }
-// }
+exports.editReaderProfile = async (req, res) => {
 
-// exports.editProfile = async (req, res) => {
+    const {accountId , firstName , lastName , country , gender , profileImageUrl} = req.body;
 
-//     const
+    try {
 
-//     try {
+      const updatedProfile = await Reader.findOneAndUpdate({_id: accountId} , {$set:{firstName : firstName , lastName:lastName  , country:country , gender:gender , profileImageUrl:profileImageUrl}} , {new: true})
+     
+      res.json({
+        status:200,
+        message: updatedProfile
+      })
 
-//     } catch (error) {
+    } catch (error) {
 
-//     }
-// }
+      res.json({
+        status:500,
+        message: error.message
+      })
+
+    }
+}
+
+
+exports.editPublisherProfile = async (req, res) => {
+
+  const {accountId , name , address , country , gender , federalTaxIdentificationNumber , stateTaxRegistrationCertificateNumber , profileImageUrl} = req.body;
+
+  try {
+
+    const updatedProfile = await Publisher.findOneAndUpdate({_id: accountId} , {$set:{name : name , address:address  , country:country , gender:gender ,  federalTaxIdentificationNumber: federalTaxIdentificationNumber , stateTaxRegistrationCertificateNumber:stateTaxRegistrationCertificateNumber , profileImageUrl:profileImageUrl}} , {new: true})
+   
+    res.json({
+      status:200,
+      message: updatedProfile
+    })
+
+  } catch (error) {
+
+    res.json({
+      status:500,
+      message: error.message
+    })
+    
+  }
+}
+
+
+exports.editAuthorProfile = async (req, res) => {
+
+  const {accountId , firstName ,lastName, authorLicense , country , gender , languageOfWriting , profileImageUrl} = req.body;
+
+  try {
+
+    const updatedProfile = await Author.findOneAndUpdate({_id: accountId} , {$set:{firstName : firstName , lastName:lastName , authorLicense:authorLicense  , country:country , gender:gender , languageOfWriting:languageOfWriting , profileImageUrl:profileImageUrl}} , {new: true})
+   
+    res.json({
+      status:200,
+      message: updatedProfile
+    })
+
+  } catch (error) {
+
+    res.json({
+      status:500,
+      message: error.message
+    })
+    
+  }
+}
