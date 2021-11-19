@@ -11,6 +11,11 @@ const Publisher = require("../Model/Publisher");
 const saltRounds = 10;
 require("dotenv").config();
 
+
+
+
+
+
 exports.register = async (req, res) => {
   const { userName, email, password } = req.body;
 
