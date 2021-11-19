@@ -14,7 +14,7 @@ const authorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    authorlicense:{
+    authorLicense:{
         type: String,
         required: true
     },

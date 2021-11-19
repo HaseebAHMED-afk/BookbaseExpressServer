@@ -219,7 +219,7 @@ exports.buildPublisherProfile = async (req, res) => {
   try {
     const user = await User.findOne({ _id: userId });
     try {
-      const newProfile = new Account({
+      const newProfile = new Publisher({
         userId,
         name,
         address,
