@@ -809,3 +809,80 @@ exports.editAuthorProfile = async (req, res) => {
     
   }
 }
+
+
+exports.closeAuthorAccount = async (req,res) =>{
+  const { accountId } = req.body;
+
+  try {
+    const deletedAccount = await Author.findOneAndDelete({_id: accountId})
+
+    res.json({
+      status:200,
+      message:"Account successfully deleted"
+    })
+
+  } catch (error) {
+    
+    res.json({
+      status:500,
+      message: error.message
+    })
+
+  }
+
+  
+}
+
+
+
+exports.closePublisherAccount = async (req,res) =>{
+
+  const { accountId } = req.body;
+
+  try {
+    const deletedAccount = await Publisher.findOneAndDelete({_id: accountId})
+
+    res.json({
+      status:200,
+      message:"Account successfully deleted"
+    })
+
+  } catch (error) {
+    
+    res.json({
+      status:500,
+      message: error.message
+    })
+
+  }
+
+  
+}
+
+
+exports.closeReaderAccount = async (req,res) =>{
+
+  const { accountId } = req.body;
+
+  try {
+    const deletedAccount = await Reader.findOneAndDelete({_id: accountId})
+
+    res.json({
+      status:200,
+      message:"Account successfully deleted"
+    })
+
+  } catch (error) {
+    
+    res.json({
+      status:500,
+      message: error.message
+    })
+
+  }
+
+}
+
+
+
