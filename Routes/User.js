@@ -1,4 +1,4 @@
-const { register, login, verify, generateForgetPasswordCode, checkForgetPasswordCode, resetUserPassword, getAllUsers, buildAuthorProfile, buildReaderProfile, buildPublisherProfile, editPublisherProfile, editAuthorProfile, editReaderProfile } = require('../Controllers/User');
+const { register, login, verify, generateForgetPasswordCode, checkForgetPasswordCode, resetUserPassword, getAllUsers, buildAuthorProfile, buildReaderProfile, buildPublisherProfile, editPublisherProfile, editAuthorProfile, editReaderProfile } = require('../API/User');
 
 const router = require('express').Router()
 

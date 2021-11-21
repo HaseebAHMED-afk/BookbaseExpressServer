@@ -22,10 +22,6 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    publishDate: {
-        type: String,
-        required: true
-    },
     isbn:{
         type: String,
         required: true
@@ -34,10 +30,12 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    rating: {
-        type: String,
-        default:'0.0'
-    }
+    reviews:[{
+        userId:String,
+        dateAndTime: String,
+        review:String,
+        stars: String
+    }]
 },{
     timestamps: true
 })

@@ -9,7 +9,11 @@ connectDB()
 
 const userRouter = require('./Routes/User')
 
+const bookRouter = require('./Routes/Book')
+
 app.use('/user' , userRouter)
+
+app.use('/book' , bookRouter)
 
 app.get('/' , (req,res)=>{
     res.json({
