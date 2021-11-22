@@ -13,10 +13,6 @@ const bookRequestSchema = new mongoose.Schema({
     publisherId:{
         type: String,
         required: true
-    },
-    aproovedbyPublisher:{
-        type: Boolean,
-        default: false
     }
 },{
     timestamps: true
