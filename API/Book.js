@@ -268,3 +268,40 @@ exports.cancelBookRequest = async (req , res) =>{
         })
     }
 }
+
+
+exports.getAllBooks = async (req ,res) =>{
+    try {
+        const books = await Book.find({});
+
+        res.json({
+            status:200,
+            message: books
+        })
+
+    } catch (error) {
+        res.json({
+            status:500,
+            message: error.message
+        })
+    }
+}
+
+exports.getBookById = async (req,res) =>{
+    const {bookId} = req.body;
+
+    try {
+        const book = await Book.findOne({_id: bookId})
+        
+        res.json({
+            status:200,
+            message: book
+        })
+    } catch (error) {
+        res.json({
+            status:500,
+            message: error.message
+        })
+    }
+
+}

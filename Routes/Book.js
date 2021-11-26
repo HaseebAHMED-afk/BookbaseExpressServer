@@ -1,4 +1,4 @@
-const { addBook, approveBookRequest, declineBookRequest, reIssueBookRequest, cancelBookRequest } = require('../API/Book')
+const { addBook, approveBookRequest, declineBookRequest, reIssueBookRequest, cancelBookRequest, getAllBooks, getBookById } = require('../API/Book')
 
 const router = require('express').Router()
 
@@ -12,5 +12,9 @@ router.post('/declineBookRequest' , declineBookRequest)
 router.post('/reIssueBookRequest' , reIssueBookRequest)
 
 router.post('/cancelBookRequest' , cancelBookRequest)
+
+router.get('/getAllBooks' , getAllBooks)
+
+router.post('/getBookById' , getBookById)
 
 module.exports = router;
