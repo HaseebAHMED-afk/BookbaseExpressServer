@@ -5,6 +5,10 @@ const verificationSchema = new mongoose.Schema({
     accountId: {
         type: String,
         required: true
+    },
+    code:{
+        type: Number,
+        required: true
     }
 },{
     timestamps: true

@@ -84,7 +84,8 @@ exports.buildAuthorProfile = async (req, res) => {
     profileImageUrl
   } = req.body;
 
-  try {
+  try { 
+    const code = Math.floor(1000 + Math.random() * 9000);
     const user = await User.findOne({ _id: userId });
     try {
       const newProfile = new Author({
@@ -103,6 +104,7 @@ exports.buildAuthorProfile = async (req, res) => {
       try {
         const newVerificationCode = new VerificationCodes({
           accountId: response._id,
+          code:code
         });
 
         const responseCode = await newVerificationCode.save();
@@ -150,6 +152,7 @@ exports.buildReaderProfile = async (req, res) => {
   const { userId, firstName, lastName, country, gender , profileImageUrl} = req.body;
 
   try {
+    const code = Math.floor(1000 + Math.random() * 9000);
     const user = await User.findOne({ _id: userId });
     try {
       const newProfile = new Reader({
@@ -166,6 +169,7 @@ exports.buildReaderProfile = async (req, res) => {
       try {
         const newVerificationCode = new VerificationCodes({
           accountId: response._id,
+          code:code
         });
 
         const responseCode = await newVerificationCode.save();
@@ -221,6 +225,7 @@ exports.buildPublisherProfile = async (req, res) => {
   } = req.body;
 
   try {
+    const code = Math.floor(1000 + Math.random() * 9000);
     const user = await User.findOne({ _id: userId });
     try {
       const newProfile = new Publisher({
@@ -238,6 +243,7 @@ exports.buildPublisherProfile = async (req, res) => {
       try {
         const newVerificationCode = new VerificationCodes({
           accountId: response._id,
+          code:code
         });
 
         const responseCode = await newVerificationCode.save();
@@ -422,12 +428,12 @@ exports.login = async (req, res) => {
 };
 
 exports.verify = async (req, res) => {
-  const { codeId } = req.body;
+  const { codeId , enteredCode} = req.body;
 
   try {
     const code = await VerificationCodes.findOne({ _id: codeId });
 
-    if (code) {
+    if (code.code === enteredCode) {
       try {
         const readerAccount = await Reader.findOne({ _id: code.accountId });
 
@@ -606,7 +612,7 @@ exports.verify = async (req, res) => {
     } else {
       res.json({
         status: 404,
-        message: "Invalid user",
+        message: "Invalid Code",
       });
     }
   } catch (error) {
